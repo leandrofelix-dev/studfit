@@ -14,7 +14,7 @@ import { RenderCell } from "./render-cell";
 export const TableWrapper = () => {
   return (
     <div className=" w-full flex flex-col gap-4">
-      <Table aria-label="Example table with custom cells">
+      <Table aria-label="Tabela de gerenciamento de alunos">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn

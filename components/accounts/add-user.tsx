@@ -8,6 +8,7 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
+import { RiUserAddLine } from "react-icons/ri";
 import React from "react";
 
 export const AddUser = () => {
@@ -17,7 +18,8 @@ export const AddUser = () => {
     <div>
       <>
         <Button onPress={onOpen} color="primary">
-          Add User
+          <RiUserAddLine />
+          Adicionar aluno
         </Button>
         <Modal
           isOpen={isOpen}
