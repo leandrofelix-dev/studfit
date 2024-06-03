@@ -30,17 +30,17 @@ export const RenderCell = ({ user, columnKey }: Props) => {
           </div>
         </div>
       );
-    case "status":
+    case "turno":
       return (
         <Chip
           size="sm"
           variant="flat"
           color={
-            cellValue === "Matriculado"
-              ? "success"
-              : cellValue === "Lista de espera"
+            cellValue === "Manhã"
+              ? "primary"
+              : cellValue === "Tarde"
               ? "warning"
-              : "danger"
+              : "secondary"
           }
         >
           <span className="capitalize text-xs">{cellValue}</span>
@@ -64,11 +64,13 @@ export const RenderCell = ({ user, columnKey }: Props) => {
               </button>
             </Tooltip>
           </div>
-          <div>
+          <div
+            onClick={() => console.log("Excluir aluno", user.id)}
+          >
             <Tooltip
               content="Excluir aluno"
               color="danger"
-              onClick={() => console.log("Excluir aluno", user.id)}
+              
             >
               <button>
                 <DeleteIcon size={20} fill="#FF0080" />
