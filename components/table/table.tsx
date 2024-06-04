@@ -8,8 +8,8 @@ import {
   TableRow,
 } from "@nextui-org/react";
 import React from "react";
-import { columns, users } from "./data";
 import { RenderCell } from "./render-cell";
+import { columns, users } from "@/mocks/data";
 
 export const TableWrapper = () => {
   return (
@@ -31,7 +31,7 @@ export const TableWrapper = () => {
             <TableRow>
               {(columnKey) => (
                 <TableCell>
-                  {RenderCell({ user: item, columnKey: columnKey })}
+                  {RenderCell({ user: item, columnKey: columnKey, email: item.email || '' })}
                 </TableCell>
               )}
             </TableRow>
