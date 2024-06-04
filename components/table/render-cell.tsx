@@ -3,7 +3,7 @@ import React from "react";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { EditIcon } from "../icons/table/edit-icon";
 import { EyeIcon } from "../icons/table/eye-icon";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+
 
 interface Props {
   user: (any)[number];
@@ -31,7 +31,7 @@ export const RenderCell = ({ user, columnKey, email }: Props) => {
     case "turno":
       return (
         <Chip
-          size="md"
+          size="sm"
           variant="flat"
           color={
             cellValue === "Manhã"
@@ -49,11 +49,8 @@ export const RenderCell = ({ user, columnKey, email }: Props) => {
         <div className="flex items-end gap-4 justify-end">
           <div>
             <Tooltip content="Visualizar perfil do aluno">
-              <button 
-                // onClick={() => console.log("Visualizar perfil do aluno", user.id)}
-                onClick={() => console.log("Visualizar perfil do aluno", user.id)}
-              >
-                <EyeIcon size={20} fill="#979797"/>
+              <button onClick={() => console.log("Visualizar perfil do aluno", user.id)}>
+                <EyeIcon size={20} fill="#979797" />
               </button>
             </Tooltip>
           </div>
