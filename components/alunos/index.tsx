@@ -5,7 +5,7 @@ import { TableWrapper } from "@/components/table/table";
 import { AddUser } from "./add-user";
 import { IoSearch } from "react-icons/io5";
 
-export const Accounts = () => {
+export const Alunos = () => {
   return (
     <div className="my-14 lg:px-6 max-w-[95rem] mx-auto w-full flex flex-col gap-4">
       <h3 className="text-xl font-semibold">Gerenciamento de Alunos</h3>

@@ -30,7 +30,7 @@ export const AddUser = () => {
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Add User
+                  Cadastrar Aluno
                 </ModalHeader>
                 <ModalBody>
                   <Input label="Email" variant="bordered" />
@@ -46,11 +46,11 @@ export const AddUser = () => {
                   />
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="danger" variant="flat" onClick={onClose}>
-                    Close
+                  <Button color="danger" variant="ghost" onClick={onClose}>
+                    Cancelar
                   </Button>
                   <Button color="primary" onPress={onClose}>
-                    Add User
+                    Cadastrar
                   </Button>
                 </ModalFooter>
               </>

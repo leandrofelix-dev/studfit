@@ -31,7 +31,7 @@ export const RenderCell = ({ user, columnKey, email }: Props) => {
     case "turno":
       return (
         <Chip
-          size="sm"
+          size="md"
           variant="flat"
           color={
             cellValue === "Manhã"
@@ -41,7 +41,7 @@ export const RenderCell = ({ user, columnKey, email }: Props) => {
               : "secondary"
           }
         >
-          <span className="capitalize text-xs">{cellValue}</span>
+          <span className="capitalize text-xs font-semibold">{cellValue}</span>
         </Chip>
       );
     case "actions":
