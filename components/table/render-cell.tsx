@@ -1,37 +1,39 @@
-import { User, Tooltip, Chip, Link } from "@nextui-org/react";
+import { User, Tooltip, Chip } from "@nextui-org/react";
 import React from "react";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { EditIcon } from "../icons/table/edit-icon";
 import { EyeIcon } from "../icons/table/eye-icon";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure } from "@nextui-org/react";
+import { users } from "./data";
 
 interface Props {
-  user: (any)[number];
+  user: (typeof users)[number];
   columnKey: string | React.Key;
-  email: string;
 }
 
-export const RenderCell = ({ user, columnKey, email }: Props) => {
+export const RenderCell = ({ user, columnKey }: Props) => {
+  // @ts-ignore
   const cellValue = user[columnKey];
   switch (columnKey) {
-    case "nome":
+    case "name":
       return (
         <User
           name={cellValue}
-          isFocusable={true}
-          description={
-            email
-              ? (email)
-              : (<p className="text-default-200">Email não cadastrado.</p>)
-          }
         >
-          {user}
+          {user.email}
         </User>
+      );
+    case "role":
+      return (
+        <div>
+          <div>
+            <span>{cellValue}</span>
+          </div>
+        </div>
       );
     case "turno":
       return (
         <Chip
-          size="md"
+          size="sm"
           variant="flat"
           color={
             cellValue === "Manhã"
@@ -44,16 +46,14 @@ export const RenderCell = ({ user, columnKey, email }: Props) => {
           <span className="capitalize text-xs font-semibold">{cellValue}</span>
         </Chip>
       );
+
     case "actions":
       return (
-        <div className="flex items-end gap-4 justify-end">
+        <div className="flex items-center gap-4 ">
           <div>
             <Tooltip content="Visualizar perfil do aluno">
-              <button 
-                // onClick={() => console.log("Visualizar perfil do aluno", user.id)}
-                onClick={() => console.log("Visualizar perfil do aluno", user.id)}
-              >
-                <EyeIcon size={20} fill="#979797"/>
+              <button onClick={() => console.log("Visualizar perfil do aluno", user.id)}>
+                <EyeIcon size={20} fill="#979797" />
               </button>
             </Tooltip>
           </div>
@@ -80,12 +80,6 @@ export const RenderCell = ({ user, columnKey, email }: Props) => {
         </div>
       );
     default:
-      return (
-        <User
-          name={cellValue}
-        >
-          {user}
-        </User>
-      );
+      return cellValue;
   }
 };
