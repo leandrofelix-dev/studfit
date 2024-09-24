@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React from "react";
 import { Sidebar } from "./sidebar.styles";
@@ -9,6 +9,7 @@ import { SidebarMenu } from "./sidebar-menu";
 import { useSidebarContext } from "../layout/layout-context";
 import { usePathname } from "next/navigation";
 import { FaPeopleGroup, FaPeopleLine } from "react-icons/fa6";
+import Image from "next/image";
 
 export const SidebarWrapper = () => {
   const pathname = usePathname();
@@ -24,8 +25,13 @@ export const SidebarWrapper = () => {
           collapsed: collapsed,
         })}
       >
-        <div className={Sidebar.Header()}>
-          <CompaniesDropdown />
+        <div className={(Sidebar.Header(), "flex items-center justify-center")}>
+          <Image
+            src={"/logo.svg"}
+            alt={"logo studfit"}
+            width={120}
+            height={40}
+          />
         </div>
         <div className="flex flex-col justify-between h-full">
           <div className={Sidebar.Body()}>

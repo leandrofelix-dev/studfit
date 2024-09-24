@@ -17,7 +17,7 @@ export const AddUser = () => {
   return (
     <div>
       <>
-        <Button onPress={onOpen} color="primary">
+        <Button onPress={onOpen} color="success" variant="solid" radius="sm">
           <RiUserAddLine />
           Adicionar aluno
         </Button>
@@ -49,7 +49,7 @@ export const AddUser = () => {
                   <Button color="danger" variant="ghost" onClick={onClose}>
                     Cancelar
                   </Button>
-                  <Button color="primary" onPress={onClose}>
+                  <Button color="success" onPress={onClose}>
                     Cadastrar
                   </Button>
                 </ModalFooter>

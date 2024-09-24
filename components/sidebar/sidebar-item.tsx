@@ -11,13 +11,7 @@ interface Props {
 }
 
 export const SidebarItem = ({ icon, title, isActive, href = "" }: Props) => {
-  const { collapsed, setCollapsed } = useSidebarContext();
-
-  const handleClick = () => {
-    if (window.innerWidth < 768) {
-      setCollapsed();
-    }
-  };
+  console.log("sidebar-item.tsx", title);
   return (
     <NextLink
       href={href}
@@ -25,15 +19,25 @@ export const SidebarItem = ({ icon, title, isActive, href = "" }: Props) => {
     >
       <div
         className={clsx(
+          clsx(
+            "flex gap-2 w-full min-h-[44px] h-full items-center px-3.5 rounded-xl cursor-pointer transition-all duration-150 active:scale-[0.98]",
+            title !== "Frequência"
+              ? "[&_svg_path]:fill-success-500"
+              : "[&_svg_path]:fill-success-50"
+          ),
           isActive
-            ? "bg-primary-100 [&_svg_path]:fill-primary-500"
-            : "hover:bg-default-100",
-          "flex gap-2 w-full min-h-[44px] h-full items-center px-3.5 rounded-xl cursor-pointer transition-all duration-150 active:scale-[0.98]"
+            ? "bg-success-100 [&_svg_path]:fill-success-500"
+            : "hover:bg-default-100 [&_svg_path]:fill-success-50"
         )}
-        onClick={handleClick}
       >
         {icon}
-        <span className="text-default-900">{title}</span>
+        <span
+          className={clsx(
+            title === "Frequência" ? "text-success-50" : "text-default-900"
+          )}
+        >
+          {title}
+        </span>
       </div>
     </NextLink>
   );
