@@ -14,18 +14,22 @@ export const UserDropdown = () => {
     <Dropdown>
       <NavbarItem>
         <DropdownTrigger>
-          <Avatar
-            as="button"
-            color="default"
-            size="md"
-          />
+          <Avatar as="button" color="default" size="md" />
         </DropdownTrigger>
       </NavbarItem>
       <DropdownMenu
         aria-label="User menu actions"
         onAction={(actionKey) => console.log({ actionKey })}
       >
-        <DropdownItem key="logout" color="danger" className="text-danger">
+        <DropdownItem
+          key="logout"
+          color="danger"
+          className="text-danger"
+          onClick={() => {
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+          }}
+        >
           <div className="flex items-center justify-start gap-2">
             <BiLogOut />
             Desconectar-se
