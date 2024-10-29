@@ -27,7 +27,7 @@ export default function Login() {
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const router = useRouter(); // Inicializar o hook useRouter
+  const router = useRouter();
 
   useEffect(() => {
     if (isLogged()) {
@@ -62,6 +62,7 @@ export default function Login() {
       setLoginError(null);
       handleSaveToken(response.data.data.token);
       router.push("/frequencia");
+      window.location.reload();
     } catch (error) {
       setLoginError(
         "Falha no login. Verifique suas credenciais e tente novamente."

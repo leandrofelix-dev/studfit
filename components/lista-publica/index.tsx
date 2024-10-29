@@ -48,7 +48,7 @@ const ListaPublica: React.FC<ListaPublicaProps> = ({ waitList }) => {
       width: "70vw",
       height: "100vh",
       margin: "80px 0px 0px 0px ",
-      padding: "20px", 
+      padding: "20px",
       borderRadius: "10px",
       backgroundColor: "#f9f9f9",
       color: "black",
@@ -139,11 +139,7 @@ const ListaPublica: React.FC<ListaPublicaProps> = ({ waitList }) => {
       <div style={styles.container}>
         <div style={styles.header}>
           <div style={styles.logo}>
-            <img
-              src="ifce.png"
-              alt="IFCE Logo"
-              style={styles.logoImage}
-            />
+            <img src="ifce.png" alt="IFCE Logo" style={styles.logoImage} />
             <span style={styles.logoText}>STUDfit</span>
           </div>
 
@@ -162,7 +158,8 @@ const ListaPublica: React.FC<ListaPublicaProps> = ({ waitList }) => {
         {/* Main Content */}
         <h2 style={styles.title}>Lista de espera</h2>
         <p style={styles.subtitle}>
-          Lista de estudantes cadastrados na lista de espera da academia do IFCE Campus Cedro
+          Lista de estudantes cadastrados na lista de espera da academia do IFCE
+          Campus Cedro
         </p>
 
         <AddAluno onAddStudent={handleAddStudent} />
@@ -175,7 +172,9 @@ const ListaPublica: React.FC<ListaPublicaProps> = ({ waitList }) => {
                 key={index}
                 style={{
                   ...styles.studentItem,
-                  ...(index === filteredStudents.length - 1 ? styles.lastItem : {}),
+                  ...(index === filteredStudents.length - 1
+                    ? styles.lastItem
+                    : {}),
                 }}
               >
                 <span style={styles.studentIndex}>{index + 1}.</span>
