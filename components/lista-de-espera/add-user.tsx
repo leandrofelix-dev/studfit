@@ -7,7 +7,7 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from '@nextui-org/react';
+} from "@nextui-org/react";
 import { RiUserAddLine } from "react-icons/ri";
 import React from "react";
 
@@ -17,7 +17,7 @@ export const AddUser = () => {
   return (
     <div>
       <>
-        <Button onPress={onOpen} color="primary">
+        <Button onPress={onOpen} color="success">
           <RiUserAddLine />
           Adicionar aluno
         </Button>
@@ -48,8 +48,8 @@ export const AddUser = () => {
                   <Button color="danger" variant="ghost" onClick={onClose}>
                     Cancelar
                   </Button>
-                  <Button color="primary" onPress={onClose}>
-                  Adicionar
+                  <Button color="success" onPress={onClose}>
+                    Adicionar
                   </Button>
                 </ModalFooter>
               </>

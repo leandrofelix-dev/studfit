@@ -4,7 +4,6 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Navbar,
   NavbarItem,
 } from "@nextui-org/react";
 import React from "react";
@@ -21,6 +20,7 @@ export const UserDropdown = () => {
             size="md"
             src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
           />
+          <Avatar as="button" color="default" size="md" />
         </DropdownTrigger>
       </NavbarItem>
       <DropdownMenu
@@ -43,8 +43,21 @@ export const UserDropdown = () => {
         <DropdownItem key="logout" color="danger" className="text-danger ">
           Log Out
         </DropdownItem>
-        <DropdownItem key="switch">
-          <DarkModeSwitch />
+        <DropdownItem key="switch" />
+        <DarkModeSwitch />
+        <DropdownItem
+          key="logout"
+          color="danger"
+          className="text-danger"
+          onClick={() => {
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+          }}
+        >
+          <div className="flex items-center justify-start gap-2">
+            <BiLogOut />
+            Desconectar-se
+          </div>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

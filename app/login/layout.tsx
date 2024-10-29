@@ -3,14 +3,13 @@ import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { fontSans } from "@/config/fonts";
 import clsx from "clsx";
-import { Providers } from "./dashboard/providers";
 
 export const metadata: Metadata = {
-  title: "StudFit",
+  title: "StudFit - Login",
   description: "Academia do IFCE Cedro",
 };
 
-export default function RootLayout({
+export default function LoginLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -18,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={clsx("font-sans antialiased", fontSans.className)}>
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   );
