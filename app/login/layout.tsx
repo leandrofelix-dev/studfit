@@ -16,7 +16,12 @@ export default function LoginLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className={clsx("font-sans antialiased", fontSans.className)}>
+      <body
+        className={clsx(
+          "font-sans antialiased overflow-hidden",
+          fontSans.className
+        )}
+      >
         {children}
       </body>
     </html>

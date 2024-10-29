@@ -6,10 +6,12 @@ import {
   DropdownTrigger,
   NavbarItem,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { BiLogOut } from "react-icons/bi";
 
 export const UserDropdown = () => {
+  const router = useRouter();
   return (
     <Dropdown>
       <NavbarItem>
@@ -27,7 +29,7 @@ export const UserDropdown = () => {
           className="text-danger"
           onClick={() => {
             localStorage.removeItem("token");
-            window.location.href = "/login";
+            router.push("/login"); 
           }}
         >
           <div className="flex items-center justify-start gap-2">

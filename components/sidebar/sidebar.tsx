@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sidebar } from "./sidebar.styles"; 
+import { Sidebar } from "./sidebar.styles";
 import { HomeIcon } from "../icons/sidebar/home-icon";
 import { SidebarItem } from "./sidebar-item";
 import { SidebarMenu } from "./sidebar-menu";
@@ -38,7 +38,7 @@ export const SidebarWrapper = () => {
               title="Frequência"
               icon={<HomeIcon />}
               isActive={pathname === "/"}
-              href="/"
+              href="/frequencia"
             />
             <SidebarMenu title="Gerenciamento">
               <SidebarItem
