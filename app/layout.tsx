@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { fontSans } from "@/config/fonts";
 import clsx from "clsx";
-import { Providers } from "./dashboard/providers";
+import { Providers } from "./frequencia/providers";
 
 export const metadata: Metadata = {
   title: "StudFit",

@@ -1,8 +1,9 @@
-import { ListaDeEspera } from '@/components/lista-de-espera';
-import React from 'react';
+"use client";
+import { ListaDeEspera } from "@/components/lista-de-espera";
+import React from "react";
 
 const alunos = () => {
-   return <ListaDeEspera />;
+  return <ListaDeEspera />;
 };
 
 export default alunos;

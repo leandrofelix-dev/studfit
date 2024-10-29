@@ -1,11 +1,10 @@
 import React from "react";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
-import { fontSans } from "@/config/fonts";
-import clsx from "clsx";
+import { Providers } from "../frequencia/providers";
 
 export const metadata: Metadata = {
-  title: "StudFit - Login",
+  title: "Login - StudFit",
   description: "Academia do IFCE Cedro",
 };
 
@@ -16,8 +15,8 @@ export default function LoginLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className={clsx("font-sans antialiased", fontSans.className)}>
-        {children}
+      <body>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

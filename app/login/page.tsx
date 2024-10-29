@@ -1,10 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input, Button } from "@nextui-org/react";
 import { FiAlertCircle } from "react-icons/fi";
 import { loginAction } from "@/actions/login";
 import Image from "next/image";
+import { resetTheme } from "@/utils/reset-theme";
+import { AiOutlineLoading } from "react-icons/ai";
+import { useRouter } from "next/navigation"; // Usar o hook correto
+import { isLogged } from "@/utils/validate-token";
+
+resetTheme();
 
 export type LoginCredentials = {
   email: string;
@@ -12,8 +18,6 @@ export type LoginCredentials = {
 };
 
 export default function Login() {
-  if (isLogged()) window.location.href = "/dashboard";
-
   const [credentials, setCredentials] = useState<LoginCredentials>({
     email: "",
     senha: "",
@@ -21,10 +25,15 @@ export default function Login() {
 
   const [errors, setErrors] = useState<{ email?: string; senha?: string }>({});
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  function isLogged() {
-    return localStorage.getItem("token");
-  }
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLogged()) {
+      router.push("/frequencia");
+    }
+  }, [router]);
 
   function handleValidadeForm() {
     const newErrors: { email?: string; senha?: string } = {};
@@ -47,14 +56,19 @@ export default function Login() {
 
   async function handleSubmit() {
     if (!handleValidadeForm()) return;
+    setIsLoading(true);
     try {
       const response = await loginAction(credentials);
       setLoginError(null);
       handleSaveToken(response.data.data.token);
+      router.push("/frequencia");
+      window.location.reload();
     } catch (error) {
       setLoginError(
         "Falha no login. Verifique suas credenciais e tente novamente."
       );
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -106,11 +120,15 @@ export default function Login() {
             </span>
           )}
           <Button
-            className="mt-4 rounded-lg text-white"
-            color="success"
+            className={`mt-4 rounded-lg text-white ${isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-success-500"}`}
             onClick={handleSubmit}
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? (
+              <AiOutlineLoading className="animate-spin" />
+            ) : (
+              "Login"
+            )}
           </Button>
           <a
             href="#"
