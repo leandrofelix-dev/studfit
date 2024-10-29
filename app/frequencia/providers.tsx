@@ -15,7 +15,7 @@ export interface ProvidersProps {
 export function Providers({ children, themeProps }: ProvidersProps) {
   const pathname = usePathname();
 
-  if (pathname === "/lista-publica") {
+  if (pathname === "/lista-publica" || pathname === "/login") {
     return (
       <NextUIProvider>
         <NextThemesProvider
