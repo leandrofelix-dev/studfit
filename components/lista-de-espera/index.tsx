@@ -1,8 +1,8 @@
 "use client";
 import { Button, Input } from "@nextui-org/react";
 import React from "react";
-import { TableWrapper } from "@/components/table/table";
 import { IoSearch } from "react-icons/io5";
+import { TableListaDeEspera } from "../table/table-lista-de-espera";
 
 export const ListaDeEspera = () => {
   return (
@@ -22,7 +22,7 @@ export const ListaDeEspera = () => {
         </div>
       </div>
       <div className="max-w-[95rem] mx-auto w-full">
-        <TableWrapper />
+        <TableListaDeEspera />
       </div>
     </div>
   );

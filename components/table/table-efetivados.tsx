@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { RenderCell } from "./render-cell";
 import { columns } from "@/mocks/data";
-import { action } from "@/config/axios";
+import { getEfetivadosAction } from "@/actions/get-efetivados";
 
 interface Aluno {
   id: string;
@@ -17,25 +17,23 @@ interface Aluno {
   email: string;
 }
 
-export const TableWrapper = () => {
+export const TableEfetivados = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
 
-  async function handleGetAlunos() {
+  async function handleGetEfetivados() {
     try {
-      const response = await action.get("alunos/efetivados");
-      if (Array.isArray(response.data.data)) {
-        setAlunos(response.data.data);
-      } else {
-        console.error("Resposta da API não é um array:", response.data);
-      }
-      console.log(response.data);
+      const response = await getEfetivadosAction();
+      setAlunos(response.data.data);
     } catch (error) {
-      console.error("Erro ao buscar alunos:", error);
+      console.error(
+        "Ocorreu um erro ao buscar os alunos efetivados",
+        error
+      )
     }
   }
 
   useEffect(() => {
-    handleGetAlunos();
+    handleGetEfetivados();
   }, []);
 
   return (
