@@ -21,6 +21,7 @@ interface Aluno {
 
 export const TableEfetivados = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [closeModal, setCloseModal] = useState(true);
 
   async function handleGetEfetivados() {
     try {
@@ -66,8 +67,8 @@ export const TableEfetivados = () => {
         </TableBody>
       </Table>
       <CustomModal
-        isOpen={true}
-        onClose={() => console.log("Fechar modal")}
+        isOpen={closeModal}
+        onClose={() => setCloseModal(false)}
         size="3xl"
         hasConfirmButton={false}
         title="Perfil"
@@ -86,6 +87,7 @@ export const TableEfetivados = () => {
               fazUsoDeCigarro: false,
               fazUsoDeBebidaAlcoolica: true,
               praticaAtividadeFisica: false,
+              faltasParaReprovar: 4,
             }}
           />
         }

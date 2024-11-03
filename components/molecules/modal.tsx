@@ -33,7 +33,7 @@ function CustomModal({
             <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
             <ModalBody>{content}</ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
+              <Button color="danger" variant="bordered" onPress={onClose}>
                 Fechar
               </Button>
               {hasConfirmButton && (
