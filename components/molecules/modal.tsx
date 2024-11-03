@@ -1,0 +1,52 @@
+import React from "react";
+import {
+  Modal as NextUIModal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "@nextui-org/react";
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
+  hasConfirmButton?: boolean;
+  title: string;
+  content?: React.ReactNode;
+}
+
+function CustomModal({
+  isOpen,
+  onClose,
+  size = "md",
+  hasConfirmButton = true,
+  title,
+  content,
+}: ModalProps) {
+  return (
+    <NextUIModal size={size} isOpen={isOpen} onClose={onClose}>
+      <ModalContent>
+        {() => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+            <ModalBody>{content}</ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={onClose}>
+                Fechar
+              </Button>
+              {hasConfirmButton && (
+                <Button color="success" onPress={onClose}>
+                  Ação
+                </Button>
+              )}
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </NextUIModal>
+  );
+}
+
+export { CustomModal };
