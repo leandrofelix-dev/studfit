@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { RenderCell } from "./render-cell";
 import { columns } from "@/mocks/data";
 import { getListaDeEsperaAction } from "@/actions/get-lista-de-espera";
-import { PTBR_Responses } from "@/shared/responses";
+import { PTBR } from "@/shared/responses";
 
 interface Aluno {
   id: string;
@@ -26,10 +26,7 @@ export const TableListaDeEspera = () => {
       const response = await getListaDeEsperaAction();
       setAlunos(response.data.data);
     } catch (error) {
-      console.error(
-        PTBR_Responses.ERROR_GET_EFETIVADOS,
-        error
-      )
+      console.error(PTBR.ERROR.GET_EFETIVADOS, error);
     }
   }
 
