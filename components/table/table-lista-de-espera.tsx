@@ -16,6 +16,18 @@ interface Aluno {
   id: string;
   nome: string;
   email: string;
+  peso: number;
+  altura: number;
+  telefone: string;
+  cirurgias: string;
+  patologias: string;
+  meses_experiencia_musculacao: number;
+  diagnostico_lesao_joelho: string;
+  fazUsoDeCigarro: boolean;
+  fazUsoDeBebidaAlcoolica: boolean;
+  praticaAtividadeFisica: boolean;
+  faltasParaReprovar: number;
+  status: string;
 }
 
 export const TableListaDeEspera = () => {

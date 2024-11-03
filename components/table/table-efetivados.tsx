@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -17,11 +19,24 @@ interface Aluno {
   id: string;
   nome: string;
   email: string;
+  peso: number;
+  altura: number;
+  telefone: string;
+  cirurgias: string;
+  patologias: string;
+  meses_experiencia_musculacao: number;
+  diagnostico_lesao_joelho: string;
+  fazUsoDeCigarro: boolean;
+  fazUsoDeBebidaAlcoolica: boolean;
+  praticaAtividadeFisica: boolean;
+  faltasParaReprovar: number;
+  status: string;
 }
 
 export const TableEfetivados = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
-  const [closeModal, setCloseModal] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<Aluno | null>(null);
 
   async function handleGetEfetivados() {
     try {
@@ -35,6 +50,16 @@ export const TableEfetivados = () => {
   useEffect(() => {
     handleGetEfetivados();
   }, []);
+
+  const handleViewProfile = (user: Aluno) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
+  };
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -54,12 +79,12 @@ export const TableEfetivados = () => {
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
-                <TableCell>
-                  {RenderCell({
-                    user: item,
-                    columnKey: columnKey,
-                    email: item.email,
-                  })}
+                <TableCell key={columnKey}>
+                  <RenderCell
+                    user={item}
+                    columnKey={columnKey}
+                    onViewProfile={handleViewProfile}
+                  />
                 </TableCell>
               )}
             </TableRow>
@@ -67,29 +92,15 @@ export const TableEfetivados = () => {
         </TableBody>
       </Table>
       <CustomModal
-        isOpen={closeModal}
-        onClose={() => setCloseModal(false)}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
         size="3xl"
         hasConfirmButton={false}
-        title="Perfil"
+        title="Perfil do Aluno"
         content={
-          <ViewEfetivadoForm
-            dadosEfetivado={{
-              nome: "leandro felix",
-              peso: 85,
-              altura: 178,
-              email: "contato@leandrofelix.dev.br",
-              telefone: "00900000000",
-              cirurgiasFeitas: "cirurgia no calcanhar",
-              patologias: "nenhuma",
-              mesesExperienciaMusculacao: 2,
-              diagnosticoLesaoJoelho: "nenhum",
-              fazUsoDeCigarro: false,
-              fazUsoDeBebidaAlcoolica: true,
-              praticaAtividadeFisica: false,
-              faltasParaReprovar: 4,
-            }}
-          />
+          selectedUser ? (
+            <ViewEfetivadoForm dadosEfetivado={selectedUser} />
+          ) : null
         }
       />
     </div>

@@ -8,10 +8,10 @@ type efetivado = {
   altura: number;
   email: string;
   telefone: string;
-  cirurgiasFeitas: string;
+  cirurgias: string;
   patologias: string;
-  mesesExperienciaMusculacao: number;
-  diagnosticoLesaoJoelho: string;
+  meses_experiencia_musculacao: number;
+  diagnostico_lesao_joelho: string;
   fazUsoDeCigarro: boolean;
   fazUsoDeBebidaAlcoolica: boolean;
   praticaAtividadeFisica: boolean;
@@ -29,10 +29,10 @@ function ViewEfetivadoForm({ dadosEfetivado }: ViewEfetivadoFormProps) {
     altura,
     email,
     telefone,
-    cirurgiasFeitas,
+    cirurgias,
     patologias,
-    mesesExperienciaMusculacao,
-    diagnosticoLesaoJoelho,
+    meses_experiencia_musculacao,
+    diagnostico_lesao_joelho,
     fazUsoDeCigarro,
     fazUsoDeBebidaAlcoolica,
     praticaAtividadeFisica,
@@ -129,7 +129,7 @@ function ViewEfetivadoForm({ dadosEfetivado }: ViewEfetivadoFormProps) {
               variant="bordered"
               label="Cirurgias feitas"
               className="bg-gray-200/60 rounded-xl"
-              value={cirurgiasFeitas}
+              value={cirurgias}
               contentEditable={false}
               disabled
             />
@@ -150,7 +150,7 @@ function ViewEfetivadoForm({ dadosEfetivado }: ViewEfetivadoFormProps) {
               variant="bordered"
               label="Tempo de experiência com musculação (meses)"
               className="bg-gray-200/60 rounded-xl"
-              value={`${mesesExperienciaMusculacao} meses`}
+              value={`${meses_experiencia_musculacao} meses`}
               contentEditable={false}
               disabled
             />
@@ -160,7 +160,7 @@ function ViewEfetivadoForm({ dadosEfetivado }: ViewEfetivadoFormProps) {
               variant="bordered"
               label="Diagnosticado com lesão no joelho"
               className="bg-gray-200/60 rounded-xl"
-              value={diagnosticoLesaoJoelho}
+              value={diagnostico_lesao_joelho}
               contentEditable={false}
               disabled
             />

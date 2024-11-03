@@ -1,43 +1,63 @@
+// render-cell.tsx
+
+"use client";
+
 import { User, Tooltip, Chip } from "@nextui-org/react";
 import React from "react";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { EditIcon } from "../icons/table/edit-icon";
 import { EyeIcon } from "../icons/table/eye-icon";
 
-interface Props {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user: any[number];
-  columnKey: string | React.Key;
+interface Aluno {
+  id: string;
+  nome: string;
   email: string;
+  peso: number;
+  altura: number;
+  telefone: string;
+  cirurgias: string;
+  patologias: string;
+  meses_experiencia_musculacao: number;
+  diagnostico_lesao_joelho: string;
+  fazUsoDeCigarro: boolean;
+  fazUsoDeBebidaAlcoolica: boolean;
+  praticaAtividadeFisica: boolean;
+  faltasParaReprovar: number;
+  status: string;
 }
 
-export const RenderCell = ({ user, columnKey, email }: Props) => {
-  const cellValue = user[columnKey];
+interface Props {
+  user: Aluno;
+  columnKey: string | React.Key;
+  onViewProfile: (user: Aluno) => void;
+}
+
+export const RenderCell = ({ user, columnKey, onViewProfile }: Props) => {
   switch (columnKey) {
     case "nome":
       return (
         <User
-          name={cellValue}
+          name={user.nome}
           isFocusable={true}
           description={
-            email ? (
-              email
+            user.email ? (
+              user.email
             ) : (
               <p className="text-default-200">Email não cadastrado.</p>
             )
           }
-        >
-          {user}
-        </User>
+        />
       );
     case "status":
       return (
         <Chip
           size="md"
           variant="flat"
-          color={cellValue === "Regular" ? "success" : "warning"}
+          color={user.status === "Regular" ? "success" : "warning"}
         >
-          <span className="capitalize text-xs font-semibold">{cellValue}</span>
+          <span className="capitalize text-xs font-semibold">
+            {user.status}
+          </span>
         </Chip>
       );
     case "actions":
@@ -45,11 +65,7 @@ export const RenderCell = ({ user, columnKey, email }: Props) => {
         <div className="flex items-end gap-4 justify-end">
           <div>
             <Tooltip content="Visualizar perfil do aluno">
-              <button
-                onClick={() =>
-                  console.log("Visualizar perfil do aluno", user.id)
-                }
-              >
+              <button onClick={() => onViewProfile(user)}>
                 <EyeIcon size={20} fill="#979797" />
               </button>
             </Tooltip>
@@ -61,9 +77,9 @@ export const RenderCell = ({ user, columnKey, email }: Props) => {
               </button>
             </Tooltip>
           </div>
-          <div onClick={() => console.log("Excluir aluno", user.id)}>
+          <div>
             <Tooltip content="Excluir aluno" color="danger">
-              <button>
+              <button onClick={() => console.log("Excluir aluno", user.id)}>
                 <DeleteIcon size={20} fill="#FF0080" />
               </button>
             </Tooltip>
@@ -71,6 +87,6 @@ export const RenderCell = ({ user, columnKey, email }: Props) => {
         </div>
       );
     default:
-      return <User name={cellValue}>{user}</User>;
+      return <span>{user[columnKey as keyof Aluno]}</span>;
   }
 };
