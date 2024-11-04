@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -9,16 +11,17 @@ import {
 import React, { useEffect, useState } from "react";
 import { RenderCell } from "./render-cell";
 import { columns } from "@/mocks/data";
+import { CustomModal } from "../molecules/modal";
 import { getListaDeEsperaAction } from "@/actions/get-lista-de-espera";
-import { PTBR } from "@/shared/responses";
+import { ViewListaDeEspera } from "../molecules/viewListaDeEspera";
 
 interface Aluno {
   id: string;
   nome: string;
   email: string;
+  telefone: string;
   peso: number;
   altura: number;
-  telefone: string;
   cirurgias: string;
   patologias: string;
   meses_experiencia_musculacao: number;
@@ -28,23 +31,36 @@ interface Aluno {
   pratica_exercicio_fisico: boolean;
   ausencias_consecutivas: number;
   status: string;
+  colocacao?: number;
 }
 
 export const TableListaDeEspera = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<Aluno | null>(null);
 
-  async function handleGetEfetivados() {
+  async function handleGetListaDeEspera() {
     try {
       const response = await getListaDeEsperaAction();
       setAlunos(response.data.data);
     } catch (error) {
-      console.error(PTBR.ERROR.GET_EFETIVADOS, error);
+      console.error("Ocorreu um erro ao buscar os alunos efetivados", error);
     }
   }
 
   useEffect(() => {
-    handleGetEfetivados();
+    handleGetListaDeEspera();
   }, []);
+
+  const handleViewProfile = (user: Aluno) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
+  };
 
   return (
     <div className="w-full flex flex-col gap-4">
@@ -64,18 +80,28 @@ export const TableListaDeEspera = () => {
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
-                <TableCell>
-                  {RenderCell({
-                    user: item,
-                    columnKey: columnKey,
-                    email: item.email,
-                  })}
+                <TableCell key={columnKey}>
+                  <RenderCell
+                    user={item}
+                    columnKey={columnKey}
+                    onViewProfile={handleViewProfile}
+                  />
                 </TableCell>
               )}
             </TableRow>
           )}
         </TableBody>
       </Table>
+      <CustomModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        size="3xl"
+        hasConfirmButton={false}
+        title="Perfil do Aluno"
+        content={
+          selectedUser ? <ViewListaDeEspera dadosAluno={selectedUser} /> : null
+        }
+      />
     </div>
   );
 };
