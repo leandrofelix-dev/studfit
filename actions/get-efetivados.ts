@@ -1,7 +1,6 @@
 import { action } from "@/config/axios";
-import { Aluno } from "@/contracts/alunoDTO";
 
-function getEfetivadosAction(): Promise<Aluno[]> {
+function getEfetivadosAction() {
   return action.get("alunos/efetivados");
 }
 

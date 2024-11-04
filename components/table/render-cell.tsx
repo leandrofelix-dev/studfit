@@ -2,8 +2,8 @@
 
 "use client";
 
-import { User, Tooltip, Chip } from "@nextui-org/react";
 import React from "react";
+import { User, Tooltip, Chip } from "@nextui-org/react";
 import { DeleteIcon } from "../icons/table/delete-icon";
 import { EditIcon } from "../icons/table/edit-icon";
 import { EyeIcon } from "../icons/table/eye-icon";
@@ -30,9 +30,15 @@ interface Props {
   user: Aluno;
   columnKey: string | React.Key;
   onViewProfile: (user: Aluno) => void;
+  onEditUser: (user: Aluno) => void;
 }
 
-export const RenderCell = ({ user, columnKey, onViewProfile }: Props) => {
+export const RenderCell = ({
+  user,
+  columnKey,
+  onViewProfile,
+  onEditUser,
+}: Props) => {
   switch (columnKey) {
     case "nome":
       return (
@@ -72,7 +78,7 @@ export const RenderCell = ({ user, columnKey, onViewProfile }: Props) => {
           </div>
           <div>
             <Tooltip content="Editar aluno" color="foreground">
-              <button onClick={() => console.log("Editar aluno", user.id)}>
+              <button onClick={() => onEditUser(user)}>
                 <EditIcon size={20} fill="#979797" />
               </button>
             </Tooltip>

@@ -1,5 +1,8 @@
+// table-efetivados.tsx
+
 "use client";
 
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,12 +11,12 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
 import { RenderCell } from "./render-cell";
 import { columns } from "@/mocks/data";
 import { getEfetivadosAction } from "@/actions/get-efetivados";
 import { CustomModal } from "../molecules/modal";
 import { ViewEfetivadoForm } from "../molecules/viewEfetivado";
+import { EditEfetivadoForm } from "../molecules/editEfetivados";
 
 interface Aluno {
   id: string;
@@ -35,7 +38,8 @@ interface Aluno {
 
 export const TableEfetivados = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<Aluno | null>(null);
 
   async function handleGetEfetivados() {
@@ -53,12 +57,27 @@ export const TableEfetivados = () => {
 
   const handleViewProfile = (user: Aluno) => {
     setSelectedUser(user);
-    setIsModalOpen(true);
+    setIsViewModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleEditUser = (user: Aluno) => {
+    setSelectedUser(user);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
     setSelectedUser(null);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleUserUpdated = () => {
+    handleGetEfetivados();
+    handleCloseEditModal();
   };
 
   return (
@@ -84,6 +103,7 @@ export const TableEfetivados = () => {
                     user={item}
                     columnKey={columnKey}
                     onViewProfile={handleViewProfile}
+                    onEditUser={handleEditUser}
                   />
                 </TableCell>
               )}
@@ -91,15 +111,32 @@ export const TableEfetivados = () => {
           )}
         </TableBody>
       </Table>
+
       <CustomModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        isOpen={isViewModalOpen}
+        onClose={handleCloseViewModal}
         size="3xl"
         hasConfirmButton={false}
         title="Perfil do Aluno"
         content={
           selectedUser ? (
             <ViewEfetivadoForm dadosEfetivado={selectedUser} />
+          ) : null
+        }
+      />
+
+      <CustomModal
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEditModal}
+        size="3xl"
+        hasConfirmButton={false}
+        title="Editar Aluno"
+        content={
+          selectedUser ? (
+            <EditEfetivadoForm
+              dadosEfetivado={selectedUser}
+              onUserUpdated={handleUserUpdated}
+            />
           ) : null
         }
       />
