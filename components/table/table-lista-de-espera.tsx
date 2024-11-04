@@ -23,10 +23,10 @@ interface Aluno {
   patologias: string;
   meses_experiencia_musculacao: number;
   diagnostico_lesao_joelho: string;
-  fazUsoDeCigarro: boolean;
-  fazUsoDeBebidaAlcoolica: boolean;
-  praticaAtividadeFisica: boolean;
-  faltasParaReprovar: number;
+  consumo_cigarro: boolean;
+  consumo_alcool: boolean;
+  pratica_exercicio_fisico: boolean;
+  ausencias_consecutivas: number;
   status: string;
 }
 

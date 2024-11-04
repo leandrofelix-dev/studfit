@@ -12,10 +12,10 @@ type efetivado = {
   patologias: string;
   meses_experiencia_musculacao: number;
   diagnostico_lesao_joelho: string;
-  fazUsoDeCigarro: boolean;
-  fazUsoDeBebidaAlcoolica: boolean;
-  praticaAtividadeFisica: boolean;
-  faltasParaReprovar: number;
+  consumo_cigarro: boolean;
+  consumo_alcool: boolean;
+  pratica_exercicio_fisico: boolean;
+  ausencias_consecutivas: number;
 };
 
 interface ViewEfetivadoFormProps {
@@ -33,23 +33,20 @@ function ViewEfetivadoForm({ dadosEfetivado }: ViewEfetivadoFormProps) {
     patologias,
     meses_experiencia_musculacao,
     diagnostico_lesao_joelho,
-    fazUsoDeCigarro,
-    fazUsoDeBebidaAlcoolica,
-    praticaAtividadeFisica,
-    faltasParaReprovar,
+    consumo_cigarro,
+    consumo_alcool,
+    pratica_exercicio_fisico,
+    ausencias_consecutivas,
   } = dadosEfetivado;
 
   const maxFaltas = 5;
-  const faltasUsadas = maxFaltas - faltasParaReprovar;
+  const faltasUsadas = ausencias_consecutivas;
   const progresso = (faltasUsadas / maxFaltas) * 100;
 
   let corBarra: "success" | "warning" | "danger";
 
-  if (maxFaltas - faltasParaReprovar >= 4) corBarra = "danger";
-  else if (
-    maxFaltas - faltasParaReprovar >= 2 &&
-    maxFaltas - faltasParaReprovar <= 3
-  )
+  if (ausencias_consecutivas >= 4) corBarra = "danger";
+  else if (ausencias_consecutivas >= 2 && ausencias_consecutivas <= 3)
     corBarra = "warning";
   else corBarra = "success";
 
@@ -167,17 +164,17 @@ function ViewEfetivadoForm({ dadosEfetivado }: ViewEfetivadoFormProps) {
           </div>
         </div>
         <div className="flex gap-1 flex-col">
-          <Checkbox isSelected={fazUsoDeCigarro} color="success">
+          <Checkbox isSelected={consumo_cigarro} color="success">
             <Text span className="text-gray-600">
               Faz uso de cigarro?
             </Text>
           </Checkbox>
-          <Checkbox isSelected={fazUsoDeBebidaAlcoolica} color="success">
+          <Checkbox isSelected={consumo_alcool} color="success">
             <Text span className="text-gray-600">
               Faz uso de bebidas alcoólicas?
             </Text>
           </Checkbox>
-          <Checkbox isSelected={praticaAtividadeFisica} color="success">
+          <Checkbox isSelected={pratica_exercicio_fisico} color="success">
             <Text span className="text-gray-600">
               Pratica atividades físicas?
             </Text>
@@ -187,7 +184,7 @@ function ViewEfetivadoForm({ dadosEfetivado }: ViewEfetivadoFormProps) {
           <Text>
             Faltam{" "}
             <Text span bold>
-              {faltasParaReprovar} faltas
+              {maxFaltas - ausencias_consecutivas} faltas
             </Text>{" "}
             para remoção do aluno da academia.
           </Text>
