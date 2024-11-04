@@ -1,7 +1,8 @@
-import { action } from "@/config/axios"; 
+import { action } from "@/config/axios";
+import { Aluno } from "@/contracts/alunoDTO";
 
-function getEfetivadosAction() {
-    return action.get("alunos/efetivados")
+function getEfetivadosAction(): Promise<Aluno[]> {
+  return action.get("alunos/efetivados");
 }
 
-  export { getEfetivadosAction };	
+export { getEfetivadosAction };
