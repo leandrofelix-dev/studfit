@@ -2,7 +2,7 @@
 import { Button, Input } from "@nextui-org/react";
 import React from "react";
 import { IoSearch } from "react-icons/io5";
-import { TableListaDeEspera } from "../table/table-lista-de-espera";
+import { TableListaEspera } from "../table/table-lista-de-espera";
 
 export const ListaDeEspera = () => {
   return (
@@ -22,7 +22,7 @@ export const ListaDeEspera = () => {
         </div>
       </div>
       <div className="max-w-[95rem] mx-auto w-full">
-        <TableListaDeEspera />
+        <TableListaEspera />
       </div>
     </div>
   );
