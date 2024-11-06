@@ -11,6 +11,7 @@ import {
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onConfirm?: () => void;
   size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
   hasConfirmButton?: boolean;
   title: string;
@@ -20,6 +21,7 @@ interface ModalProps {
 function CustomModal({
   isOpen,
   onClose,
+  onConfirm,
   size = "md",
   hasConfirmButton = true,
   title,
@@ -37,8 +39,8 @@ function CustomModal({
                 Fechar
               </Button>
               {hasConfirmButton && (
-                <Button color="success" onPress={onClose}>
-                  Ação
+                <Button color="success" onPress={onConfirm}>
+                  Confirmar
                 </Button>
               )}
             </ModalFooter>

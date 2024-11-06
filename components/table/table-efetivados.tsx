@@ -11,15 +11,17 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RenderCell } from "./render-cell";
 import { columns } from "@/mocks/data";
 import { getEfetivadosAction } from "@/actions/get-efetivados";
+import { deleteEfetivadoAction } from "@/actions/excluir-efetivado";
 import { CustomModal } from "../molecules/modal";
 import { ViewEfetivadoForm } from "../molecules/viewEfetivado";
 import { EditEfetivadoForm } from "../molecules/editEfetivados";
 import { PTBR } from "@/shared/responses";
+import { isBrowser } from "@/utils/is-browser";
 
 interface Aluno {
   id: string;
@@ -43,6 +45,7 @@ export const TableEfetivados = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<Aluno | null>(null);
 
   async function handleGetEfetivados() {
@@ -51,6 +54,7 @@ export const TableEfetivados = () => {
       setAlunos(response.data.data);
     } catch (error) {
       console.error(PTBR.ERROR.GET_EFETIVADOS, error);
+      if (isBrowser()) toast.error(PTBR.ERROR.GET_EFETIVADOS);
     }
   }
 
@@ -68,6 +72,31 @@ export const TableEfetivados = () => {
     setIsEditModalOpen(true);
   };
 
+  const handleDeleteUser = (user: Aluno) => {
+    setSelectedUser(user);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteUser = async () => {
+    if (!selectedUser) return;
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Token não encontrado");
+      return;
+    }
+    try {
+      await deleteEfetivadoAction(selectedUser, token);
+      handleGetEfetivados();
+      setIsDeleteModalOpen(false);
+      setSelectedUser(null);
+    } catch (error) {
+      console.error(PTBR.ERROR.DELETE_EFETIVADOS, error);
+      if (isBrowser()) {
+        toast.error(PTBR.ERROR.DELETE_EFETIVADOS);
+      }
+    }
+  };
+
   const handleCloseViewModal = () => {
     setIsViewModalOpen(false);
     setSelectedUser(null);
@@ -75,6 +104,11 @@ export const TableEfetivados = () => {
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
     setSelectedUser(null);
   };
 
@@ -108,6 +142,7 @@ export const TableEfetivados = () => {
                     columnKey={columnKey}
                     onViewProfile={handleViewProfile}
                     onEditUser={handleEditUser}
+                    onDeleteUser={handleDeleteUser}
                   />
                 </TableCell>
               )}
@@ -142,6 +177,20 @@ export const TableEfetivados = () => {
               onUserUpdated={handleUserUpdated}
             />
           ) : null
+        }
+      />
+
+      <CustomModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        size="md"
+        hasConfirmButton={true}
+        title="Confirmar Exclusão"
+        onConfirm={confirmDeleteUser}
+        content={
+          <p>
+            Você tem certeza que deseja excluir o aluno {selectedUser?.nome}?
+          </p>
         }
       />
     </div>

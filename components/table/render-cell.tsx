@@ -31,6 +31,7 @@ interface Props {
   columnKey: string | React.Key;
   onViewProfile: (user: Aluno) => void;
   onEditUser: (user: Aluno) => void;
+  onDeleteUser: (user: Aluno) => void;
 }
 
 export const RenderCell = ({
@@ -38,6 +39,7 @@ export const RenderCell = ({
   columnKey,
   onViewProfile,
   onEditUser,
+  onDeleteUser,
 }: Props) => {
   switch (columnKey) {
     case "nome":
@@ -85,7 +87,7 @@ export const RenderCell = ({
           </div>
           <div>
             <Tooltip content="Excluir aluno" color="danger">
-              <button onClick={() => console.log("Excluir aluno", user.id)}>
+              <button onClick={() => onDeleteUser(user)}>
                 <DeleteIcon size={20} fill="#FF0080" />
               </button>
             </Tooltip>
