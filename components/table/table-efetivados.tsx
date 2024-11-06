@@ -11,12 +11,15 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { RenderCell } from "./render-cell";
 import { columns } from "@/mocks/data";
 import { getEfetivadosAction } from "@/actions/get-efetivados";
 import { CustomModal } from "../molecules/modal";
 import { ViewEfetivadoForm } from "../molecules/viewEfetivado";
 import { EditEfetivadoForm } from "../molecules/editEfetivados";
+import { PTBR } from "@/shared/responses";
 
 interface Aluno {
   id: string;
@@ -47,7 +50,7 @@ export const TableEfetivados = () => {
       const response = await getEfetivadosAction();
       setAlunos(response.data.data);
     } catch (error) {
-      console.error("Ocorreu um erro ao buscar os alunos efetivados", error);
+      console.error(PTBR.ERROR.GET_EFETIVADOS, error);
     }
   }
 
@@ -82,6 +85,7 @@ export const TableEfetivados = () => {
 
   return (
     <div className="w-full flex flex-col gap-4">
+      <ToastContainer />
       <Table aria-label="Tabela de gerenciamento de alunos">
         <TableHeader columns={columns}>
           {(column) => (
@@ -130,7 +134,7 @@ export const TableEfetivados = () => {
         onClose={handleCloseEditModal}
         size="3xl"
         hasConfirmButton={false}
-        title="Editar Aluno"
+        title="Atualização cadastral"
         content={
           selectedUser ? (
             <EditEfetivadoForm

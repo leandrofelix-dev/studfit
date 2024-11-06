@@ -14,6 +14,7 @@ import { columns } from "@/mocks/data";
 import { CustomModal } from "../molecules/modal";
 import { getListaDeEsperaAction } from "@/actions/get-lista-de-espera";
 import { ViewListaDeEspera } from "../molecules/viewListaDeEspera";
+import { PTBR } from "@/shared/responses";
 
 interface Aluno {
   id: string;
@@ -44,7 +45,7 @@ export const TableListaDeEspera = () => {
       const response = await getListaDeEsperaAction();
       setAlunos(response.data.data);
     } catch (error) {
-      console.error("Ocorreu um erro ao buscar os alunos efetivados", error);
+      console.error(PTBR.ERROR.GET_EFETIVADOS, error);
     }
   }
 

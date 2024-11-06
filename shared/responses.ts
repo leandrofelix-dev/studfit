@@ -10,6 +10,7 @@ const PTBR = {
     DELETE_EFETIVADOS: "Ocorreu um erro ao deletar o aluno efetivado",
     DELETE_LISTA_ESPERA:
       "Ocorreu um erro ao deletar o aluno em lista de espera",
+    LOGIN: "Ocorreu um erro ao realizar o login",
   },
   SUCCESS: {
     GENERIC: "Operação realizada com sucesso",
@@ -19,6 +20,7 @@ const PTBR = {
     PUT_LISTA_ESPERA: "Aluno em lista de espera atualizado com sucesso!",
     DELETE_EFETIVADOS: "Aluno efetivado deletado com sucesso!",
     DELETE_LISTA_ESPERA: "Aluno em lista de espera deletado com sucesso!",
+    LOGIN: "Seja bem-vindo!",
   },
 };
 

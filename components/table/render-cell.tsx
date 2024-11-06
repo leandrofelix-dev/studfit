@@ -59,10 +59,10 @@ export const RenderCell = ({
         <Chip
           size="md"
           variant="flat"
-          color={user.status === "Regular" ? "success" : "warning"}
+          color={user.status === "REGULAR" ? "success" : "warning"}
         >
           <span className="capitalize text-xs font-semibold">
-            {user.status}
+            {user.status === "REGULAR" ? "Regular" : "Em alerta"}
           </span>
         </Chip>
       );

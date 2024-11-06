@@ -9,6 +9,8 @@ import { resetTheme } from "@/utils/reset-theme";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useRouter } from "next/navigation"; // Usar o hook correto
 import { isLogged } from "@/utils/validate-token";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 resetTheme();
 
@@ -74,6 +76,7 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-300/80">
+      <ToastContainer />
       <div className="w-full max-w-lg px-6 py-10 rounded-lg bg-white">
         <div className="flex justify-center gap-10 items-center mb-6">
           <div className="flex items-center">

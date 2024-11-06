@@ -3,7 +3,10 @@
 
 import React, { useState } from "react";
 import { Input, Checkbox, Button } from "@nextui-org/react";
-import { putEfetivadoAction } from "@/actions/put-efetivado";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import { patchEfetivadoAction } from "@/actions/put-efetivado";
+import { PTBR } from "@/shared/responses";
 
 interface Aluno {
   id: string;
@@ -32,7 +35,9 @@ export const EditEfetivadoForm: React.FC<EditEfetivadoFormProps> = ({
   dadosEfetivado,
   onUserUpdated,
 }) => {
-  const [formData, setFormData] = useState<Aluno>({ ...dadosEfetivado });
+  const [formData, setFormData] = useState<Partial<Aluno>>({
+    ...dadosEfetivado,
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (
@@ -47,10 +52,20 @@ export const EditEfetivadoForm: React.FC<EditEfetivadoFormProps> = ({
   const handleUpdate = async () => {
     setIsSubmitting(true);
     try {
-      await putEfetivadoAction(formData);
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Token não encontrado");
+
+      const updatedData = {
+        ...formData,
+        status: dadosEfetivado.status,
+        ausencias_consecutivas: dadosEfetivado.ausencias_consecutivas,
+      };
+
+      await patchEfetivadoAction(updatedData, token);
       onUserUpdated();
     } catch (error) {
-      console.error("Erro ao atualizar o aluno", error);
+      console.error(PTBR.ERROR.PUT_EFETIVADOS, error);
+      toast.error("Erro ao atualizar aluno efetivado");
     } finally {
       setIsSubmitting(false);
     }
@@ -58,89 +73,107 @@ export const EditEfetivadoForm: React.FC<EditEfetivadoFormProps> = ({
 
   return (
     <div className="flex flex-col gap-4">
+      <ToastContainer />
       <Input
+        className="bg-gray-200/60 rounded-xl"
+        variant="bordered"
         label="Nome"
         value={formData.nome}
         onChange={(e) => handleInputChange(e, "nome")}
       />
+      <div className="flex gap-2">
+        <Input
+          className="bg-gray-200/60 rounded-xl"
+          variant="bordered"
+          label="Peso"
+          type="number"
+          value={String(formData.peso)}
+          onChange={(e) => handleInputChange(e, "peso")}
+        />
+        <Input
+          className="bg-gray-200/60 rounded-xl"
+          variant="bordered"
+          label="Altura"
+          type="number"
+          value={String(formData.altura)}
+          onChange={(e) => handleInputChange(e, "altura")}
+        />
+      </div>
+      <div className="flex gap-2">
+        <Input
+          className="bg-gray-200/60 rounded-xl"
+          variant="bordered"
+          label="Email"
+          value={formData.email}
+          onChange={(e) => handleInputChange(e, "email")}
+        />
+        <Input
+          className="bg-gray-200/60 rounded-xl"
+          variant="bordered"
+          label="Telefone"
+          value={formData.telefone}
+          onChange={(e) => handleInputChange(e, "telefone")}
+        />
+      </div>
+
       <Input
-        label="Email"
-        value={formData.email}
-        onChange={(e) => handleInputChange(e, "email")}
-      />
-      <Input
-        label="Telefone"
-        value={formData.telefone}
-        onChange={(e) => handleInputChange(e, "telefone")}
-      />
-      <Input
-        label="Peso"
-        type="number"
-        value={String(formData.peso)}
-        onChange={(e) => handleInputChange(e, "peso")}
-      />
-      <Input
-        label="Altura"
-        type="number"
-        value={String(formData.altura)}
-        onChange={(e) => handleInputChange(e, "altura")}
-      />
-      <Input
+        className="bg-gray-200/60 rounded-xl"
+        variant="bordered"
         label="Cirurgias"
         value={formData.cirurgias}
         onChange={(e) => handleInputChange(e, "cirurgias")}
       />
       <Input
+        className="bg-gray-200/60 rounded-xl"
+        variant="bordered"
         label="Patologias"
         value={formData.patologias}
         onChange={(e) => handleInputChange(e, "patologias")}
       />
-      <Input
-        label="Meses de Experiência em Musculação"
-        type="number"
-        value={String(formData.meses_experiencia_musculacao)}
-        onChange={(e) => handleInputChange(e, "meses_experiencia_musculacao")}
-      />
-      <Input
-        label="Diagnóstico de Lesão no Joelho"
-        value={formData.diagnostico_lesao_joelho}
-        onChange={(e) => handleInputChange(e, "diagnostico_lesao_joelho")}
-      />
-      <div className="flex gap-4">
+      <div className="flex gap-2">
+        <Input
+          className="bg-gray-200/60 rounded-xl"
+          variant="bordered"
+          label="Meses de Experiência em Musculação"
+          type="number"
+          value={String(formData.meses_experiencia_musculacao)}
+          onChange={(e) => handleInputChange(e, "meses_experiencia_musculacao")}
+        />
+        <Input
+          className="bg-gray-200/60 rounded-xl"
+          variant="bordered"
+          label="Diagnóstico de Lesão no Joelho"
+          value={formData.diagnostico_lesao_joelho}
+          onChange={(e) => handleInputChange(e, "diagnostico_lesao_joelho")}
+        />
+      </div>
+      <div className="flex gap-2 flex-col">
         <Checkbox
+          color="success"
           isSelected={formData.consumo_cigarro}
           onChange={(e) => handleInputChange(e as any, "consumo_cigarro")}
         >
-          Consumo de Cigarro
+          Faz uso de cigarro?
         </Checkbox>
         <Checkbox
+          color="success"
           isSelected={formData.consumo_alcool}
           onChange={(e) => handleInputChange(e as any, "consumo_alcool")}
         >
-          Consumo de Álcool
+          Consome bebidas alcoólicas?
         </Checkbox>
         <Checkbox
+          color="success"
           isSelected={formData.pratica_exercicio_fisico}
           onChange={(e) =>
             handleInputChange(e as any, "pratica_exercicio_fisico")
           }
         >
-          Prática de Exercícios Físicos
+          Pratica atividades físicas?
         </Checkbox>
       </div>
-      <Input
-        label="Ausências Consecutivas"
-        type="number"
-        value={String(formData.ausencias_consecutivas)}
-        onChange={(e) => handleInputChange(e, "ausencias_consecutivas")}
-      />
-      <Input
-        label="Status"
-        value={formData.status}
-        onChange={(e) => handleInputChange(e, "status")}
-      />
       <Button color="success" isLoading={isSubmitting} onPress={handleUpdate}>
-        Atualizar
+        Salvar
       </Button>
     </div>
   );
