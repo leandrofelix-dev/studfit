@@ -1,18 +1,18 @@
 "use client";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from "@nextui-org/react";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableColumn,
+//   TableHeader,
+//   TableRow,
+// } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
-import { RenderCell } from "./render-cell";
-import { columns } from "@/mocks/data";
+// import { RenderCell } from "./render-cell";
+// import { columns } from "@/mocks/data";
 import { CustomModal } from "../molecules/modal";
-import { getListaDeEsperaAction } from "@/actions/get-lista-de-espera";
+// import { getListaDeEsperaAction } from "@/actions/get-lista-de-espera";
 import { ViewListaDeEspera } from "../molecules/viewListaDeEspera";
 import { PTBR } from "@/shared/responses";
 
@@ -36,14 +36,14 @@ interface Aluno {
 }
 
 export const TableListaDeEspera = () => {
-  const [alunos, setAlunos] = useState<Aluno[]>([]);
+  // const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<Aluno | null>(null);
 
   async function handleGetListaDeEspera() {
     try {
-      const response = await getListaDeEsperaAction();
-      setAlunos(response.data.data);
+      // const response = await getListaDeEsperaAction();
+      // setAlunos(response.data.data);
     } catch (error) {
       console.error(PTBR.ERROR.GET_EFETIVADOS, error);
     }
@@ -53,10 +53,10 @@ export const TableListaDeEspera = () => {
     handleGetListaDeEspera();
   }, []);
 
-  const handleViewProfile = (user: Aluno) => {
-    setSelectedUser(user);
-    setIsModalOpen(true);
-  };
+  // const handleViewProfile = (user: Aluno) => {
+  //   setSelectedUser(user);
+  //   setIsModalOpen(true);
+  // };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -65,7 +65,7 @@ export const TableListaDeEspera = () => {
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <Table aria-label="Tabela de gerenciamento de alunos">
+      {/* <Table aria-label="Tabela de gerenciamento de alunos">
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn
@@ -92,7 +92,7 @@ export const TableListaDeEspera = () => {
             </TableRow>
           )}
         </TableBody>
-      </Table>
+      </Table> */}
       <CustomModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}

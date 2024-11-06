@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RenderCell } from "./render-cell";
 import { columns } from "@/mocks/data";
