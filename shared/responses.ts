@@ -10,6 +10,7 @@ const PTBR = {
     DELETE_EFETIVADOS: "Ocorreu um erro ao deletar o aluno efetivado",
     DELETE_LISTA_ESPERA:
       "Ocorreu um erro ao deletar o aluno em lista de espera",
+    GET_FREQUENCIA: "Ocorreu um erro ao buscar a frequência",
     SEND_FREQUENCIA: "Ocorreu um erro ao enviar a frequência",
     LOGIN: "Ocorreu um erro ao realizar o login",
   },
@@ -21,6 +22,7 @@ const PTBR = {
     PUT_LISTA_ESPERA: "Aluno em lista de espera atualizado com sucesso!",
     DELETE_EFETIVADOS: "Aluno efetivado deletado com sucesso!",
     DELETE_LISTA_ESPERA: "Aluno em lista de espera deletado com sucesso!",
+    GET_FREQUENCIA: "Frequência buscada com sucesso",
     SEND_FREQUENCIA: "Frequência enviada com sucesso",
     LOGIN: "Seja bem-vindo!",
   },

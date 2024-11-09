@@ -13,6 +13,7 @@ export const DarkModeSwitch = () => {
       {isDarkTheme ? <FaRegMoon /> : <LuSun />}
       <Switch
         size="sm"
+        color="success"
         isSelected={isDarkTheme}
         onValueChange={(e) => setTheme(e ? "dark" : "light")}
       />

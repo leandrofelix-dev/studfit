@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { User, Chip, Checkbox } from "@nextui-org/react";
+import { User, Checkbox } from "@nextui-org/react";
 
 interface Aluno {
   id: string;
@@ -24,12 +24,16 @@ interface Aluno {
 interface Props {
   user: Aluno;
   columnKey: string | React.Key;
-  onViewProfile: (user: Aluno) => void;
-  onEditUser: (user: Aluno) => void;
-  onDeleteUser: (user: Aluno) => void;
+  onCheckboxChange: (id: string) => void;
+  isSelected: boolean;
 }
 
-export const RenderCellFrequencia = ({ user, columnKey }: Props) => {
+export const RenderCellFrequencia = ({
+  user,
+  columnKey,
+  onCheckboxChange,
+  isSelected,
+}: Props) => {
   switch (columnKey) {
     case "nome":
       return (
@@ -45,7 +49,15 @@ export const RenderCellFrequencia = ({ user, columnKey }: Props) => {
           }
         />
       );
+    case "presenca":
+      return (
+        <Checkbox
+          color="success"
+          isSelected={isSelected}
+          onChange={() => onCheckboxChange(user.id)}
+        />
+      );
     default:
-      return <Checkbox color="success" isSelected={true} onChange={() => {}} />;
+      return <></>;
   }
 };

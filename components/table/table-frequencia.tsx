@@ -8,174 +8,141 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  Button,
+  Calendar,
 } from "@nextui-org/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { columns } from "@/mocks/data";
-import { getEfetivadosAction } from "@/actions/get-efetivados";
-import { deleteEfetivadoAction } from "@/actions/excluir-efetivado";
-import { CustomModal } from "../molecules/modal";
-import { ViewEfetivadoForm } from "../molecules/viewEfetivado";
-import { EditEfetivadoForm } from "../molecules/editEfetivados";
+import { getFrequenciaAction } from "@/actions/get-frequencia";
+import { DateValue } from "@nextui-org/react";
 import { PTBR } from "@/shared/responses";
 import { isBrowser } from "@/utils/is-browser";
+import { sendFrequenciaAction } from "@/actions/send-frequencia";
 import { RenderCellFrequencia } from "./render-cell-frequencia";
 
 interface Aluno {
   id: string;
   nome: string;
   email: string;
-  peso: number;
-  altura: number;
   telefone: string;
-  cirurgias: string;
-  patologias: string;
-  meses_experiencia_musculacao: number;
-  diagnostico_lesao_joelho: string;
-  consumo_cigarro: boolean;
-  consumo_alcool: boolean;
-  pratica_exercicio_fisico: boolean;
-  ausencias_consecutivas: number;
-  status: string;
+}
+
+interface Frequencia {
+  id: string;
+  data: string;
+  presente: boolean;
+  aluno: Aluno;
 }
 
 export const TableFrequencia = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
-  const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<Aluno | null>(null);
-
-  async function handleGetEfetivados() {
-    try {
-      const response = await getEfetivadosAction();
-      setAlunos(response.data.data);
-    } catch (error) {
-      console.error(PTBR.ERROR.GET_EFETIVADOS, error);
-      if (isBrowser()) toast.error(PTBR.ERROR.GET_EFETIVADOS);
-    }
-  }
+  const [frequencia, setFrequencia] = useState<{ [key: string]: boolean }>({});
+  const [data, setData] = useState<DateValue | null>(null);
 
   useEffect(() => {
-    handleGetEfetivados();
+    async function fetchData() {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("Token não encontrado");
+        return;
+      }
+
+      try {
+        const response = await getFrequenciaAction(token);
+        const frequenciaData: Frequencia[] = response.data.data;
+
+        const alunosData = frequenciaData.map((item) => item.aluno);
+        setAlunos(alunosData);
+
+        const frequenciaMap: { [key: string]: boolean } = {};
+        frequenciaData.forEach((item) => {
+          frequenciaMap[item.aluno.id] = item.presente;
+        });
+        setFrequencia(frequenciaMap);
+      } catch (error) {
+        console.error(PTBR.ERROR.GET_FREQUENCIA, error);
+        if (isBrowser()) toast.error(PTBR.ERROR.GET_FREQUENCIA);
+      }
+    }
+    fetchData();
   }, []);
 
-  const confirmDeleteUser = async () => {
-    if (!selectedUser) return;
+  const handleCheckboxChange = (id: string) => {
+    setFrequencia((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleSubmit = async () => {
+    if (!data) {
+      toast.error("Por favor, selecione uma data.");
+      return;
+    }
+
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("Token não encontrado");
       return;
     }
+
+    const frequenciaData = alunos.map((aluno) => ({
+      id: aluno.id,
+      frequencia: frequencia[aluno.id] || false,
+    }));
+
     try {
-      await deleteEfetivadoAction(selectedUser, token);
-      handleGetEfetivados();
-      setIsDeleteModalOpen(false);
-      setSelectedUser(null);
+      await sendFrequenciaAction(
+        frequenciaData,
+        new Date(data.toString()),
+        token
+      );
+      toast.success("Frequência enviada com sucesso");
     } catch (error) {
-      console.error(PTBR.ERROR.DELETE_EFETIVADOS, error);
-      if (isBrowser()) {
-        toast.error(PTBR.ERROR.DELETE_EFETIVADOS);
-      }
+      console.error("Erro ao enviar frequência", error);
+      toast.error("Erro ao enviar frequência");
     }
   };
 
-  const handleCloseViewModal = () => {
-    setIsViewModalOpen(false);
-    setSelectedUser(null);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setSelectedUser(null);
-  };
-
-  const handleCloseDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-    setSelectedUser(null);
-  };
-
-  const handleUserUpdated = () => {
-    handleGetEfetivados();
-    handleCloseEditModal();
+  const handleDateChange = (newDate: DateValue | null) => {
+    setData(newDate);
   };
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex gap-4">
       <ToastContainer />
-      <Table aria-label="Tabela de gerenciamento de alunos">
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn
-              key={column.uid}
-              hideHeader={column.uid === "actions"}
-              align={column.uid === "actions" ? "center" : "start"}
-            >
-              {column.name}
-            </TableColumn>
-          )}
+
+      <Table aria-label="Tabela de frequência dos alunos">
+        <TableHeader>
+          <TableColumn>Nome</TableColumn>
+          <TableColumn>Frequência</TableColumn>
         </TableHeader>
         <TableBody items={alunos}>
           {(item) => (
             <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell key={columnKey}>
-                  <RenderCellFrequencia
-                    user={item}
-                    columnKey={columnKey}
-                    onDeleteUser={() => {}}
-                    onEditUser={() => {}}
-                    onViewProfile={() => {}}
-                  />
-                </TableCell>
-              )}
+              <TableCell>
+                <RenderCellFrequencia
+                  user={item}
+                  columnKey="nome"
+                  onCheckboxChange={handleCheckboxChange}
+                  isSelected={frequencia[item.id] || false}
+                />
+              </TableCell>
+              <TableCell>
+                <RenderCellFrequencia
+                  user={item}
+                  columnKey="presenca"
+                  onCheckboxChange={handleCheckboxChange}
+                  isSelected={frequencia[item.id] || false}
+                />
+              </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-
-      <CustomModal
-        isOpen={isViewModalOpen}
-        onClose={handleCloseViewModal}
-        size="3xl"
-        hasConfirmButton={false}
-        title="Perfil do Aluno"
-        content={
-          selectedUser ? (
-            <ViewEfetivadoForm dadosEfetivado={selectedUser} />
-          ) : null
-        }
-      />
-
-      <CustomModal
-        isOpen={isEditModalOpen}
-        onClose={handleCloseEditModal}
-        size="3xl"
-        hasConfirmButton={false}
-        title="Atualização cadastral"
-        content={
-          selectedUser ? (
-            <EditEfetivadoForm
-              dadosEfetivado={selectedUser}
-              onUserUpdated={handleUserUpdated}
-            />
-          ) : null
-        }
-      />
-
-      <CustomModal
-        isOpen={isDeleteModalOpen}
-        onClose={handleCloseDeleteModal}
-        size="md"
-        hasConfirmButton={true}
-        title="Confirmar Exclusão"
-        onConfirm={confirmDeleteUser}
-        content={
-          <p>
-            Você tem certeza que deseja excluir o aluno {selectedUser?.nome}?
-          </p>
-        }
-      />
+      <div className="flex flex-col gap-4">
+        <Calendar value={data} onChange={handleDateChange} color="success" />
+        <Button color="success" onPress={handleSubmit}>
+          Salvar
+        </Button>
+      </div>
     </div>
   );
 };
