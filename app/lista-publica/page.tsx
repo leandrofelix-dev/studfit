@@ -51,58 +51,50 @@ const CreateAlunoForm = ({ onClose }: { onClose: () => void }) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Aqui você pode adicionar a lógica para enviar os dados para a API
-    // Por exemplo:
-    // const response = await createAluno({ nome, peso, altura, email, telefone });
-
-    toast.success("Aluno inscrito com sucesso!");
+    toast.success("Você foi cadastrado na lista de espera.");
     onClose();
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <Input
-        label="Nome"
-        placeholder="Digite o nome do aluno"
+        label="Nome Completo"
         value={nome}
         onChange={(e) => setNome(e.target.value)}
         required
       />
-      <Input
-        label="Peso"
-        placeholder="Digite o peso do aluno"
-        type="number"
-        value={String(peso)}
-        onChange={(e) => setPeso(e.target.valueAsNumber)}
-        required
-      />
-      <Input
-        label="Altura"
-        placeholder="Digite a altura do aluno"
-        type="number"
-        value={altura}
-        onChange={(e) => setAltura(e.target.valueAsNumber)}
-        required
-      />
-      <Input
-        label="Email"
-        placeholder="Digite o email do aluno"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <Input
-        label="Telefone"
-        placeholder="Digite o telefone do aluno"
-        value={telefone}
-        onChange={(e) => setTelefone(e.target.value)}
-        required
-      />
+      <div className="flex gap-4">
+        <Input
+          label="Peso"
+          type="number"
+          value={String(peso)}
+          onChange={(e) => setPeso(e.target.valueAsNumber)}
+          required
+        />
+        <Input
+          label="Altura"
+          type="number"
+          value={String(altura)}
+          onChange={(e) => setAltura(e.target.valueAsNumber)}
+          required
+        />
+      </div>
+      <div className="flex gap-4">
+        <Input
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <Input
+          label="Telefone"
+          value={telefone}
+          onChange={(e) => setTelefone(e.target.value)}
+          required
+        />
+      </div>
       <div className="flex justify-end gap-4">
-        <Button type="button" onPress={onClose} color="danger">
-          Cancelar
-        </Button>
         <Button type="submit" color="success">
           Inscrever
         </Button>
@@ -282,9 +274,9 @@ const ListaDeEsperaPublica = () => {
       <CustomModal
         isOpen={isCreateModalOpen}
         onClose={handleCloseCreateModal}
-        size="md"
+        size="3xl"
         hasConfirmButton={false}
-        title="Inscrição de Aluno"
+        title="Ficha de Inscrição"
         content={<CreateAlunoForm onClose={handleCloseCreateModal} />}
       />
     </div>
