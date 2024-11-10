@@ -3,25 +3,22 @@ import { PTBR } from "@/shared/responses";
 import { toast } from "react-toastify";
 
 interface FrequenciaData {
-  id: string;
-  frequencia: boolean;
+  presente: boolean;
+  aluno: { id: string };
+  usuario: { id: string };
 }
 
-async function sendFrequenciaAction(
+async function sendFrequenciaCreateAction(
   frequenciaData: FrequenciaData[],
-  data: Date,
+  data: string,
   token: string
 ) {
   try {
-    await action.post(
-      "frequencia",
-      { frequenciaData, data },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    await action.post(`/presencas/create?data=${data}`, frequenciaData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     toast.success(PTBR.SUCCESS.SEND_FREQUENCIA);
   } catch (error) {
     toast.error(PTBR.ERROR.SEND_FREQUENCIA);
@@ -29,4 +26,4 @@ async function sendFrequenciaAction(
   }
 }
 
-export { sendFrequenciaAction };
+export { sendFrequenciaCreateAction };

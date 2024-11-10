@@ -17,8 +17,9 @@ import { getFrequenciaAction } from "@/actions/get-frequencia";
 import { DateValue } from "@nextui-org/react";
 import { PTBR } from "@/shared/responses";
 import { isBrowser } from "@/utils/is-browser";
-import { sendFrequenciaAction } from "@/actions/send-frequencia";
 import { RenderCellFrequencia } from "./render-cell-frequencia";
+import { getEfetivadosAction } from "@/actions/get-efetivados";
+import { sendFrequenciaCreateAction } from "@/actions/send-frequencia-create";
 
 interface Aluno {
   id: string;
@@ -40,7 +41,20 @@ export const TableFrequencia = () => {
   const [data, setData] = useState<DateValue | null>(null);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchAlunos() {
+      try {
+        const response = await getEfetivadosAction();
+        setAlunos(response.data.data);
+      } catch (error) {
+        console.error("Erro ao obter alunos", error);
+        if (isBrowser()) toast.error("Erro ao obter alunos");
+      }
+    }
+    fetchAlunos();
+  }, []);
+
+  useEffect(() => {
+    async function fetchFrequencia(selectedDate: string) {
       const token = localStorage.getItem("token");
       if (!token) {
         toast.error("Token não encontrado");
@@ -48,24 +62,37 @@ export const TableFrequencia = () => {
       }
 
       try {
-        const response = await getFrequenciaAction(token);
+        const response = await getFrequenciaAction(token, selectedDate);
         const frequenciaData: Frequencia[] = response.data.data;
 
-        const alunosData = frequenciaData.map((item) => item.aluno);
-        setAlunos(alunosData);
-
         const frequenciaMap: { [key: string]: boolean } = {};
-        frequenciaData.forEach((item) => {
-          frequenciaMap[item.aluno.id] = item.presente;
-        });
+        if (frequenciaData.length > 0) {
+          const alunosData = frequenciaData.map((item) => item.aluno);
+          frequenciaData.forEach((item) => {
+            frequenciaMap[item.aluno.id] = item.presente;
+          });
+          setAlunos(alunosData);
+        } else {
+          const alunosData = await getEfetivadosAction();
+          alunosData.data.data.forEach((aluno: Aluno) => {
+            frequenciaMap[aluno.id] = false;
+          });
+          setAlunos(alunosData.data.data);
+        }
         setFrequencia(frequenciaMap);
       } catch (error) {
         console.error(PTBR.ERROR.GET_FREQUENCIA, error);
         if (isBrowser()) toast.error(PTBR.ERROR.GET_FREQUENCIA);
       }
     }
-    fetchData();
-  }, []);
+
+    if (data) {
+      const selectedDate = new Date(data.toString()).toLocaleDateString(
+        "pt-BR"
+      );
+      fetchFrequencia(selectedDate);
+    }
+  }, [data]);
 
   const handleCheckboxChange = (id: string) => {
     setFrequencia((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -83,17 +110,16 @@ export const TableFrequencia = () => {
       return;
     }
 
+    const selectedDate = new Date(data.toString()).toLocaleDateString("pt-BR");
+    const usuarioId = "f1d13d02-9ebe-4f38-b372-faac79e82991";
     const frequenciaData = alunos.map((aluno) => ({
-      id: aluno.id,
-      frequencia: frequencia[aluno.id] || false,
+      presente: frequencia[aluno.id] || false,
+      aluno: { id: aluno.id },
+      usuario: { id: usuarioId },
     }));
 
     try {
-      await sendFrequenciaAction(
-        frequenciaData,
-        new Date(data.toString()),
-        token
-      );
+      await sendFrequenciaCreateAction(frequenciaData, selectedDate, token);
       toast.success("Frequência enviada com sucesso");
     } catch (error) {
       console.error("Erro ao enviar frequência", error);
@@ -106,13 +132,20 @@ export const TableFrequencia = () => {
   };
 
   return (
-    <div className="w-full flex gap-4">
+    <div className="w-full flex gap-4 justify-around">
       <ToastContainer />
+
+      <div className="flex flex-col">
+        <Calendar value={data} onChange={handleDateChange} color="success" />
+        <Button color="success" onPress={handleSubmit}>
+          Salvar
+        </Button>
+      </div>
 
       <Table aria-label="Tabela de frequência dos alunos">
         <TableHeader>
           <TableColumn>Nome</TableColumn>
-          <TableColumn>Frequência</TableColumn>
+          <TableColumn>Presença</TableColumn>
         </TableHeader>
         <TableBody items={alunos}>
           {(item) => (
@@ -137,12 +170,6 @@ export const TableFrequencia = () => {
           )}
         </TableBody>
       </Table>
-      <div className="flex flex-col gap-4">
-        <Calendar value={data} onChange={handleDateChange} color="success" />
-        <Button color="success" onPress={handleSubmit}>
-          Salvar
-        </Button>
-      </div>
     </div>
   );
 };
