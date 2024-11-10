@@ -1,5 +1,3 @@
-// table-lista-de-espera.tsx
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -10,6 +8,8 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  Input,
+  Button,
 } from "@nextui-org/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,6 +22,7 @@ import { isBrowser } from "@/utils/is-browser";
 import { deleteListaEsperaAction } from "@/actions/excluir-lista-de-espera";
 import { EditListaEsperaForm } from "../molecules/editListaDeEspera";
 import { getListaDeEsperaAction } from "@/actions/get-lista-de-espera";
+import { IoSearch } from "react-icons/io5";
 
 interface Aluno {
   id: string;
@@ -42,6 +43,8 @@ interface Aluno {
 
 export const TableListaEspera = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
+  const [filteredAlunos, setFilteredAlunos] = useState<Aluno[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [isViewModalOpen, setIsViewModalOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
@@ -51,6 +54,7 @@ export const TableListaEspera = () => {
     try {
       const response = await getListaDeEsperaAction();
       setAlunos(response.data.data);
+      setFilteredAlunos(response.data.data);
     } catch (error) {
       console.error(PTBR.ERROR.GET_LISTA_ESPERA, error);
       if (isBrowser()) toast.error(PTBR.ERROR.GET_LISTA_ESPERA);
@@ -60,6 +64,19 @@ export const TableListaEspera = () => {
   useEffect(() => {
     handleGetListaEspera();
   }, []);
+
+  useEffect(() => {
+    const filtered = alunos.filter(
+      (aluno) =>
+        aluno.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        aluno.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredAlunos(filtered);
+  }, [searchQuery, alunos]);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
 
   const handleViewProfile = (user: Aluno) => {
     setSelectedUser(user);
@@ -119,6 +136,23 @@ export const TableListaEspera = () => {
   return (
     <div className="w-full flex flex-col gap-4">
       <ToastContainer />
+      <div className="flex justify-between flex-wrap gap-4 items-center">
+        <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
+          <Input
+            placeholder="Buscar por nome ou email..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+          <Button
+            color="success"
+            variant="solid"
+            size="md"
+            className="flex items-center gap-2 text-success-50"
+          >
+            <IoSearch />
+          </Button>
+        </div>
+      </div>
       <Table aria-label="Tabela de gerenciamento de alunos">
         <TableHeader columns={columns}>
           {(column) => (
@@ -131,7 +165,7 @@ export const TableListaEspera = () => {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={alunos}>
+        <TableBody items={filteredAlunos}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
