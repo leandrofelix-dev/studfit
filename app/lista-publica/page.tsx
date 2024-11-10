@@ -20,6 +20,7 @@ import { getListaDeEsperaAction } from "@/actions/get-lista-de-espera";
 import { PTBR } from "@/shared/responses";
 import { isBrowser } from "@/utils/is-browser";
 import { CustomModal } from "@/components/molecules/modal";
+import { registrarListaDeEsperaAction } from "@/actions/registrar-lista-de-espera";
 import { Text } from "@/components/atoms/text";
 import Image from "next/image";
 
@@ -51,8 +52,20 @@ const CreateAlunoForm = ({ onClose }: { onClose: () => void }) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    toast.success("Você foi cadastrado na lista de espera.");
-    onClose();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Token não encontrado");
+      return;
+    }
+
+    const candidato = { nome, email, telefone, peso, altura };
+
+    try {
+      await registrarListaDeEsperaAction(candidato, token);
+      onClose();
+    } catch (error) {
+      console.error("Erro ao registrar na lista de espera", error);
+    }
   };
 
   return (
@@ -95,6 +108,9 @@ const CreateAlunoForm = ({ onClose }: { onClose: () => void }) => {
         />
       </div>
       <div className="flex justify-end gap-4">
+        <Button type="button" onPress={onClose} color="danger">
+          Cancelar
+        </Button>
         <Button type="submit" color="success">
           Inscrever
         </Button>
