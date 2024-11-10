@@ -11,6 +11,7 @@ import {
   Button,
   Calendar,
 } from "@nextui-org/react";
+import { today, getLocalTimeZone, isWeekend } from "@internationalized/date";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getFrequenciaAction } from "@/actions/get-frequencia";
@@ -20,6 +21,7 @@ import { isBrowser } from "@/utils/is-browser";
 import { RenderCellFrequencia } from "./render-cell-frequencia";
 import { getEfetivadosAction } from "@/actions/get-efetivados";
 import { sendFrequenciaCreateAction } from "@/actions/send-frequencia-create";
+import { useLocale } from "@react-aria/i18n";
 
 interface Aluno {
   id: string;
@@ -39,6 +41,11 @@ export const TableFrequencia = () => {
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [frequencia, setFrequencia] = useState<{ [key: string]: boolean }>({});
   const [data, setData] = useState<DateValue | null>(null);
+
+  const formatDateToBR = (dateValue: DateValue): string => {
+    const [year, month, day] = dateValue.toString().split("-");
+    return `${day}/${month}/${year}`;
+  };
 
   useEffect(() => {
     async function fetchAlunos() {
@@ -74,10 +81,14 @@ export const TableFrequencia = () => {
           setAlunos(alunosData);
         } else {
           const alunosData = await getEfetivadosAction();
-          alunosData.data.data.forEach((aluno: Aluno) => {
+          const uniqueAlunos = alunosData.data.data.filter(
+            (aluno: Aluno, index: number, self: Aluno[]) =>
+              index === self.findIndex((a) => a.id === aluno.id)
+          );
+          uniqueAlunos.forEach((aluno: Aluno) => {
             frequenciaMap[aluno.id] = false;
           });
-          setAlunos(alunosData.data.data);
+          setAlunos(uniqueAlunos);
         }
         setFrequencia(frequenciaMap);
       } catch (error) {
@@ -87,10 +98,8 @@ export const TableFrequencia = () => {
     }
 
     if (data) {
-      const selectedDate = new Date(data.toString()).toLocaleDateString(
-        "pt-BR"
-      );
-      fetchFrequencia(selectedDate);
+      const formattedDate = formatDateToBR(data);
+      fetchFrequencia(formattedDate);
     }
   }, [data]);
 
@@ -110,7 +119,7 @@ export const TableFrequencia = () => {
       return;
     }
 
-    const selectedDate = new Date(data.toString()).toLocaleDateString("pt-BR");
+    const formattedDate = formatDateToBR(data);
     const usuarioId = "f1d13d02-9ebe-4f38-b372-faac79e82991";
     const frequenciaData = alunos.map((aluno) => ({
       presente: frequencia[aluno.id] || false,
@@ -119,8 +128,7 @@ export const TableFrequencia = () => {
     }));
 
     try {
-      await sendFrequenciaCreateAction(frequenciaData, selectedDate, token);
-      toast.success("Frequência enviada com sucesso");
+      await sendFrequenciaCreateAction(frequenciaData, formattedDate, token);
     } catch (error) {
       console.error("Erro ao enviar frequência", error);
     }
@@ -130,12 +138,25 @@ export const TableFrequencia = () => {
     setData(newDate);
   };
 
+  const now = today(getLocalTimeZone());
+
+  const { locale } = useLocale();
+
+  const isDateUnavailable = (date: DateValue) => isWeekend(date, locale);
+
   return (
     <div className="w-full flex gap-4 justify-around">
       <ToastContainer />
 
       <div className="flex flex-col">
-        <Calendar value={data} onChange={handleDateChange} color="success" />
+        <Calendar
+          value={data || now}
+          onChange={handleDateChange}
+          color="success"
+          maxValue={today(getLocalTimeZone())}
+          isDateUnavailable={isDateUnavailable}
+          errorMessage="Não é possível enviar a frequência nos finais de semana"
+        />
         <Button color="success" onPress={handleSubmit}>
           Salvar
         </Button>
