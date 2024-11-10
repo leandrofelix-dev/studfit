@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { action } from "@/config/axios";
 import { PTBR } from "@/shared/responses";
 import { toast } from "react-toastify";
@@ -20,8 +21,8 @@ async function sendFrequenciaCreateAction(
       },
     });
     toast.success(PTBR.SUCCESS.SEND_FREQUENCIA);
-  } catch (error) {
-    toast.error(PTBR.ERROR.SEND_FREQUENCIA);
+  } catch (error: any) {
+    toast.error(error.response.data.description);
     throw error;
   }
 }

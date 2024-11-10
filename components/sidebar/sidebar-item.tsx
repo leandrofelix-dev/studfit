@@ -10,7 +10,6 @@ interface Props {
 }
 
 export const SidebarItem = ({ icon, title, isActive, href = "" }: Props) => {
-  console.log("sidebar-item.tsx", title);
   return (
     <NextLink
       href={href}

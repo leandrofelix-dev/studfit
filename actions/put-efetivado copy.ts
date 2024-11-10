@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { action } from "@/config/axios";
 import { Aluno } from "@/contracts/alunoDTO";
 import { PTBR } from "@/shared/responses";
@@ -11,8 +12,8 @@ async function patchListaDeEsperaAction(data: Partial<Aluno>, token: string) {
       },
     });
     toast.success(PTBR.SUCCESS.PUT_EFETIVADOS);
-  } catch (error) {
-    toast.error(PTBR.ERROR.PUT_EFETIVADOS);
+  } catch (error: any) {
+    toast.error(error.response.data.description);
     throw error;
   }
 }

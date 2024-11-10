@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { Input, Checkbox, Button } from "@nextui-org/react";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { patchEfetivadoAction } from "@/actions/put-efetivado";
 import { PTBR } from "@/shared/responses";
 
@@ -65,7 +65,6 @@ export const EditEfetivadoForm: React.FC<EditEfetivadoFormProps> = ({
       onUserUpdated();
     } catch (error) {
       console.error(PTBR.ERROR.PUT_EFETIVADOS, error);
-      toast.error("Erro ao atualizar aluno efetivado");
     } finally {
       setIsSubmitting(false);
     }

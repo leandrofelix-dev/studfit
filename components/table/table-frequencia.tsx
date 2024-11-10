@@ -123,7 +123,6 @@ export const TableFrequencia = () => {
       toast.success("Frequência enviada com sucesso");
     } catch (error) {
       console.error("Erro ao enviar frequência", error);
-      toast.error("Erro ao enviar frequência");
     }
   };
 

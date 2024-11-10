@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { User, Checkbox } from "@nextui-org/react";
 
 interface Aluno {
@@ -34,6 +34,17 @@ export const RenderCellFrequencia = ({
   onCheckboxChange,
   isSelected,
 }: Props) => {
+  const [checked, setChecked] = useState(isSelected);
+
+  useEffect(() => {
+    setChecked(isSelected);
+  }, [isSelected]);
+
+  const handleCheckboxChange = () => {
+    setChecked(!checked);
+    onCheckboxChange(user.id);
+  };
+
   switch (columnKey) {
     case "nome":
       return (
@@ -53,8 +64,8 @@ export const RenderCellFrequencia = ({
       return (
         <Checkbox
           color="success"
-          isSelected={isSelected}
-          onChange={() => onCheckboxChange(user.id)}
+          isSelected={checked}
+          onChange={handleCheckboxChange}
         />
       );
     default:
