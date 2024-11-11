@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
   User,
+  Chip,
 } from "@nextui-org/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -40,6 +41,7 @@ interface Aluno {
   praticaExercicioFisico?: boolean;
   colocacao?: number;
   status?: string;
+  posicao?: number;
 }
 
 const CreateAlunoForm = ({ onClose }: { onClose: () => void }) => {
@@ -52,16 +54,10 @@ const CreateAlunoForm = ({ onClose }: { onClose: () => void }) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Token não encontrado");
-      return;
-    }
-
     const candidato = { nome, email, telefone, peso, altura };
 
     try {
-      await registrarListaDeEsperaAction(candidato, token);
+      await registrarListaDeEsperaAction(candidato);
       onClose();
     } catch (error) {
       console.error("Erro ao registrar na lista de espera", error);
@@ -183,7 +179,7 @@ const ListaDeEsperaPublica = () => {
     setFilteredListaEspera(filteredListaEspera);
   }, [searchQuery, efetivados, listaEspera]);
 
-  const RenderCell = ({
+  const RenderCellEfetivados = ({
     user,
     columnKey,
   }: {
@@ -193,12 +189,59 @@ const ListaDeEsperaPublica = () => {
     switch (columnKey) {
       case "nome":
         return <User name={user.nome} description={user.email} />;
+      case "status":
+        return (
+          <Chip size="md" variant="flat" color="primary">
+            <span className="capitalize text-xs font-semibold">
+              {user.status}
+            </span>
+          </Chip>
+        );
       default:
         return null;
     }
   };
 
-  const columns = [{ name: "Nome", uid: "nome" }];
+  const RenderCellListaEspera = ({
+    user,
+    columnKey,
+  }: {
+    user: Aluno;
+    columnKey: string;
+  }) => {
+    switch (columnKey) {
+      case "nome":
+        return <User name={user.nome} description={user.email} />;
+      case "posicao":
+        return (
+          <Chip
+            size="md"
+            variant="flat"
+            color={
+              [1, 2, 3, 4].includes(Number(user.colocacao))
+                ? "success"
+                : "default"
+            }
+          >
+            <span className="capitalize text-xs font-semibold">
+              {user.colocacao}
+            </span>
+          </Chip>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const columnsEfetivados = [
+    { name: "Nome", uid: "nome" },
+    // { name: "Status", uid: "status" },
+  ];
+
+  const columnsListaEspera = [
+    { name: "Posição", uid: "posicao" },
+    { name: "Nome", uid: "nome" },
+  ];
 
   return (
     <div className="container mx-auto px-20 py-12">
@@ -235,7 +278,7 @@ const ListaDeEsperaPublica = () => {
             Lista de estudantes efetivos na academia do IFCE Campus Cedro
           </Text>
           <Table aria-label="Tabela de alunos efetivados" className="my-4">
-            <TableHeader columns={columns}>
+            <TableHeader columns={columnsEfetivados}>
               {(column) => (
                 <TableColumn key={column.uid}>{column.name}</TableColumn>
               )}
@@ -245,7 +288,7 @@ const ListaDeEsperaPublica = () => {
                 <TableRow key={item.id}>
                   {(columnKey) => (
                     <TableCell key={columnKey}>
-                      <RenderCell user={item} columnKey={columnKey} />
+                      <RenderCellEfetivados user={item} columnKey={columnKey} />
                     </TableCell>
                   )}
                 </TableRow>
@@ -267,7 +310,7 @@ const ListaDeEsperaPublica = () => {
           </div>
 
           <Table aria-label="Tabela de lista de espera" className="my-4">
-            <TableHeader columns={columns}>
+            <TableHeader columns={columnsListaEspera}>
               {(column) => (
                 <TableColumn key={column.uid}>{column.name}</TableColumn>
               )}
@@ -277,7 +320,10 @@ const ListaDeEsperaPublica = () => {
                 <TableRow key={item.id}>
                   {(columnKey) => (
                     <TableCell key={columnKey}>
-                      <RenderCell user={item} columnKey={columnKey} />
+                      <RenderCellListaEspera
+                        user={item}
+                        columnKey={columnKey}
+                      />
                     </TableCell>
                   )}
                 </TableRow>

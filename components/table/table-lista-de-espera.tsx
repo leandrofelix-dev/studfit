@@ -13,8 +13,7 @@ import {
 } from "@nextui-org/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { RenderCell } from "./render-cell";
-import { columns } from "@/mocks/data";
+import { RenderCellListaEspera } from "./render-cell-lista-espera";
 import { CustomModal } from "../molecules/modal";
 import { ViewListaDeEspera } from "../molecules/viewListaDeEspera";
 import { PTBR } from "@/shared/responses";
@@ -39,6 +38,7 @@ interface Aluno {
   consumoAlcool?: boolean;
   praticaExercicioFisico?: boolean;
   colocacao?: number;
+  posicao?: number;
 }
 
 export const TableListaEspera = () => {
@@ -133,6 +133,12 @@ export const TableListaEspera = () => {
     handleCloseEditModal();
   };
 
+  const columns = [
+    { name: "Posição", uid: "posicao" },
+    { name: "Nome", uid: "nome" },
+    { name: "Ações", uid: "actions" },
+  ];
+
   return (
     <div className="w-full flex flex-col gap-4">
       <ToastContainer />
@@ -170,7 +176,7 @@ export const TableListaEspera = () => {
             <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell key={columnKey}>
-                  <RenderCell
+                  <RenderCellListaEspera
                     user={item}
                     columnKey={columnKey}
                     onViewProfile={handleViewProfile}

@@ -13,7 +13,7 @@ import {
 } from "@nextui-org/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { RenderCell } from "./render-cell";
+import { RenderCellEfetivados } from "./render-cell-efetivados";
 import { columns } from "@/mocks/data";
 import { getEfetivadosAction } from "@/actions/get-efetivados";
 import { deleteEfetivadoAction } from "@/actions/excluir-efetivado";
@@ -171,7 +171,7 @@ export const TableEfetivados = () => {
             <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell key={columnKey}>
-                  <RenderCell
+                  <RenderCellEfetivados
                     user={item}
                     columnKey={columnKey}
                     onViewProfile={handleViewProfile}

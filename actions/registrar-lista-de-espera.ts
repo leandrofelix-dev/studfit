@@ -9,16 +9,9 @@ interface CanditatoData {
   telefone: string;
 }
 
-async function registrarListaDeEsperaAction(
-  candidato: CanditatoData,
-  token: string
-) {
+async function registrarListaDeEsperaAction(candidato: CanditatoData) {
   try {
-    await action.post(`/alunos/lista-espera/register`, candidato, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    await action.post(`/alunos/lista-espera/register`, candidato, {});
     toast.success(PTBR.SUCCESS.POST_LISTA_ESPERA);
   } catch (error: any) {
     toast.error(error.response.data.description);
