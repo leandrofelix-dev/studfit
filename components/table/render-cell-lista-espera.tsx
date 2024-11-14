@@ -21,7 +21,6 @@ interface Aluno {
   consumoAlcool?: boolean;
   praticaExercicioFisico?: boolean;
   colocacao?: number;
-  status?: string;
   posicao?: number;
 }
 
@@ -33,14 +32,32 @@ interface Props {
   onDeleteUser: (user: Aluno) => void;
 }
 
-export const RenderCell = ({
+export const RenderCellListaEspera = ({
   user,
   columnKey,
   onViewProfile,
   onEditUser,
   onDeleteUser,
 }: Props) => {
+  const topPositions = [1, 2, 3, 4];
+
   switch (columnKey) {
+    case "posicao":
+      return (
+        <Chip
+          size="md"
+          variant="flat"
+          color={
+            topPositions.includes(Number(user.colocacao))
+              ? "success"
+              : "default"
+          }
+        >
+          <span className="capitalize text-xs font-semibold">
+            {user.colocacao}
+          </span>
+        </Chip>
+      );
     case "nome":
       return (
         <User
@@ -54,18 +71,6 @@ export const RenderCell = ({
             )
           }
         />
-      );
-    case "status":
-      return (
-        <Chip
-          size="md"
-          variant="flat"
-          color={user.status === "REGULAR" ? "success" : "warning"}
-        >
-          <span className="capitalize text-xs font-semibold">
-            {user.status === "REGULAR" ? "Regular" : "Em alerta"}
-          </span>
-        </Chip>
       );
     case "actions":
       return (
@@ -92,14 +97,6 @@ export const RenderCell = ({
             </Tooltip>
           </div>
         </div>
-      );
-    case "posicao":
-      return (
-        <Chip size="md" variant="flat" color={"success"}>
-          <span className="capitalize text-xs font-semibold">
-            {user.posicao}
-          </span>
-        </Chip>
       );
     default:
       return <span>{user[columnKey as keyof Aluno]}</span>;

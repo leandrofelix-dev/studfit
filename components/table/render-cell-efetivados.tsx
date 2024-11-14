@@ -20,9 +20,7 @@ interface Aluno {
   consumoCigarro?: boolean;
   consumoAlcool?: boolean;
   praticaExercicioFisico?: boolean;
-  colocacao?: number;
   status?: string;
-  posicao?: number;
 }
 
 interface Props {
@@ -33,7 +31,7 @@ interface Props {
   onDeleteUser: (user: Aluno) => void;
 }
 
-export const RenderCell = ({
+export const RenderCellEfetivados = ({
   user,
   columnKey,
   onViewProfile,
@@ -92,14 +90,6 @@ export const RenderCell = ({
             </Tooltip>
           </div>
         </div>
-      );
-    case "posicao":
-      return (
-        <Chip size="md" variant="flat" color={"success"}>
-          <span className="capitalize text-xs font-semibold">
-            {user.posicao}
-          </span>
-        </Chip>
       );
     default:
       return <span>{user[columnKey as keyof Aluno]}</span>;
